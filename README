@@ -1,0 +1,8 @@
+
+Console game "Garden"
+
+* you are a farmer and own a garden when you can plan 30 plants
+* you have to water the plants but you have a limited amount of water
+* you recieve and send seeds amoung another farmers
+* each plan has a value
+* at the end of game calculate the total value of the crop
