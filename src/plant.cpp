@@ -5,13 +5,15 @@ Plant::Plant(const std::string& name, int value, int consumedWater, int frequenc
     , growTime{growTime}, isAlive{true}, isRipened{false}
 {}
 
-Plant::Plant(const Plant& other) : isAlive{true}, isRipened{false}
+Plant::Plant(const Plant& other)
 {
     name = other.name;
     value = other.value;
     consumedWater = other.consumedWater;
     frequency = other.frequency;
     growTime = other.growTime;
+    isRipened = other.isRipened;
+    isAlive = other.isAlive;
 }
 
 
@@ -22,7 +24,8 @@ Plant& Plant::operator=(const Plant& other)
     consumedWater = other.consumedWater;
     frequency = other.frequency;
     growTime = other.growTime;
-    isRipened = false;
+    isRipened = other.isRipened;
+    isAlive = other.isAlive;
 
     return *this;
 }
@@ -95,4 +98,19 @@ void Plant::setIsRipened(bool value)
 void Plant::setIsAlive(bool value)
 {
     isAlive = value;
+}
+
+bool Plant::operator==(const Plant& other)
+{
+    bool isEqual{true};
+
+    if (name != other.name
+        || value != other.value || consumedWater != other.consumedWater
+        || frequency != other.frequency || growTime != other.growTime
+        || isRipened != other.isRipened || isAlive != other.isAlive)
+    {
+        isEqual = false;
+    }
+
+    return isEqual;
 }

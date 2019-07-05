@@ -3,6 +3,8 @@
     watering frequency in days, time to qrow
 */
 
+#pragma once
+
 #include <string>
 
 class Plant {
@@ -31,6 +33,8 @@ class Plant {
         void setGrowTime(int value);
         void setIsRipened(bool value);
         void setIsAlive(bool value);
+
+        bool operator==(const Plant& other);
 
         // TO DO: how indicate that a plant needs water?
 
