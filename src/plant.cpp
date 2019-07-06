@@ -114,3 +114,13 @@ bool Plant::operator==(const Plant& other)
 
     return isEqual;
 }
+
+std::ostream &operator<<(std::ostream &out, Plant const &m)
+{ 
+    out << m.getName() << "\nValue: " << m.getValue()
+            << ", consumed water: " << m.getConsumedWater()
+            << ", frequency watering water: " << m.getFrequency()
+            << ", qrowing time: " << m.getGrowRime() << "\n";
+
+    return out;
+}

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <list>
+#include <vector>
 #include <string>
 
 #include "plant.h"
@@ -25,16 +25,22 @@ class Garden {
         unsigned short getSize() const;
         void setSize(unsigned short newSize);
 
+        bool isEmpty() const;
         // does a free spot for new plant exist
         bool hasFreeSpots() const;
         // calculate value of all plants
         int calculateValue() const;
 
         void addPlant(Plant& plant);
-        void removePlant(Plant& plant);
+        void removePlant(unsigned position);
+
+        void printRipePlants();
+        void printGrowingPlants();
+        //print ripe, growing and died plants
+        void printAllPlants();
 
     private:
         unsigned short size; // max amount of plants
         unsigned short freeSpots; // avaliable amount of plants
-        std::list<Plant> plants;
+        std::vector<Plant> plants;
 };

@@ -1,4 +1,5 @@
 #include <functional>
+#include <iostream>
 
 #include "garden.h"
 
@@ -54,6 +55,11 @@ void Garden::setSize(unsigned short newSize)
     size = newSize;
 }
 
+bool Garden::isEmpty() const
+{
+    return !freeSpots;
+}
+
 bool Garden::hasFreeSpots() const
 {
     return freeSpots;
@@ -83,9 +89,34 @@ void Garden::addPlant(Plant& plant)
     freeSpots--;
 }
 
-void Garden::removePlant(Plant& plant)
+void Garden::removePlant(unsigned position)
 {
-    if (!plants.empty()) {
-        plants.remove(std::ref(plant));
+    if (!plants.empty() && position < plants.size()) {
+        plants.erase(plants.begin() + position);
+    }
+}
+
+void Garden::printRipePlants()
+{
+    for (auto& pl : plants) {
+        if (pl.getIsRipened()) {
+            std::cout << pl;
+        }
+    }
+}
+
+void Garden::printGrowingPlants()
+{
+    for (auto& pl : plants) {
+        if (pl.getIsAlive() && !pl.getIsRipened()) {
+            std::cout << pl;
+        }
+    }
+}
+
+void Garden::printAllPlants()
+{
+    for (auto& pl : plants) {
+            std::cout << pl;
     }
 }

@@ -6,15 +6,14 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 class Plant {
     public:
         explicit Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime);
         Plant(const Plant& other);
-        Plant(Plant&& other) = delete;
 
         Plant& operator=(const Plant& other);
-        Plant& operator=(Plant&& other) = delete;
 
         ~Plant() {};
 
@@ -47,3 +46,5 @@ class Plant {
         bool isRipened;
         bool isAlive;
 };
+
+std::ostream &operator<<(std::ostream &out, Plant const &m);
