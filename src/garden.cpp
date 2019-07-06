@@ -96,6 +96,16 @@ void Garden::removePlant(unsigned position)
     }
 }
 
+const Plant& Garden::getPlantWithPos(unsigned position) const
+{
+    try {
+        return plants.at(position);
+    }
+    catch (const std::out_of_range& oor) {
+        std::cerr << "Out of Range error: " << oor.what() << '\n';
+    }
+}
+
 void Garden::printRipePlants()
 {
     for (auto& pl : plants) {

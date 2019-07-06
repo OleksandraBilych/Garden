@@ -21,7 +21,7 @@ class Plant {
         int getValue() const;
         int getConsumedWater() const;
         int getFrequency() const;
-        int getGrowRime() const;
+        int getGrowTime() const;
         bool getIsRipened() const;
         bool getIsAlive() const;
 

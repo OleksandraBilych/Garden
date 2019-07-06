@@ -50,7 +50,7 @@ int Plant::getFrequency() const
     return frequency;
 }
 
-int Plant::getGrowRime() const
+int Plant::getGrowTime() const
 {
     return growTime;
 }

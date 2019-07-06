@@ -34,6 +34,8 @@ class Garden {
         void addPlant(Plant& plant);
         void removePlant(unsigned position);
 
+        const Plant& getPlantWithPos(unsigned position) const;
+
         void printRipePlants();
         void printGrowingPlants();
         //print ripe, growing and died plants

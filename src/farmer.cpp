@@ -49,10 +49,35 @@ void Farmer::setWater(unsigned value)
 
 void Farmer::checkPlants()
 {
+    if (garden->isEmpty())
+        return;
+
+    for(auto& [position, days] : journal) {
+
+    }
 }
 
 void Farmer::removeTheCheapestPlant()
 {
+    if (garden->isEmpty())
+        return;
+
+    unsigned minRating{UINT_MAX};
+    int minPos{0};
+    unsigned rating{0};
+
+    for(auto& [pos, days] : journal) {
+        auto& plant = garden->getPlantWithPos(pos);
+
+        rating = plant.getGrowTime() / plant.getFrequency() * plant.getConsumedWater();
+        if (minRating > rating) {
+            minRating = rating;
+            minPos = pos;
+        }
+    }
+
+    garden->removePlant(minPos);
+    journal.erase(minPos);
 }
 
 void Farmer::printRipePlants()
