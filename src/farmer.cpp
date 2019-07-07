@@ -3,7 +3,7 @@
 #include "farmer.h"
 #include "globalVariables.h"
 
-Farmer::Farmer(const std::string& name, unsigned int water)
+Farmer::Farmer(const std::string& name, unsigned water)
     : name(name), water(water)
 {
     garden.reset(new Garden(gardenSize));
@@ -52,8 +52,31 @@ void Farmer::checkPlants()
     if (garden->isEmpty())
         return;
 
-    for(auto& [position, days] : journal) {
+    for(auto& [pos, d] : journal) {
+        auto& plant = garden->getPlantWithPos(pos);
 
+        // check if the plant is alive
+        if (!plant.getIsAlive()) {
+            garden->removePlant(pos);
+            journal.erase(pos);
+        }
+
+        // check if the plant is ripened
+        if (d.daysToRipe == 0) {
+            plant.setIsRipened(true);
+            garden->removePlant(pos);
+            journal.erase(pos);
+        }
+
+        // check if the plant needs watering
+        if (d.daysToWatering == 0) {
+            plant.watering(water);
+            d.daysToWatering = plant.getFrequency();
+            d.daysToRipe--;
+        } else if (d.daysToWatering > 0) {
+            d.daysToWatering--;
+            d.daysToRipe--;
+        }
     }
 }
 

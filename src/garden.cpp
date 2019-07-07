@@ -91,12 +91,15 @@ void Garden::addPlant(Plant& plant)
 
 void Garden::removePlant(unsigned position)
 {
-    if (!plants.empty() && position < plants.size()) {
-        plants.erase(plants.begin() + position);
+    try {
+        plants.at(position).setIsAlive(false);
+    }
+    catch (const std::out_of_range& oor) {
+        std::cerr << "Out of Range error: " << oor.what() << '\n';
     }
 }
 
-const Plant& Garden::getPlantWithPos(unsigned position) const
+Plant& Garden::getPlantWithPos(unsigned position)
 {
     try {
         return plants.at(position);

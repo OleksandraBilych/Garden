@@ -100,6 +100,15 @@ void Plant::setIsAlive(bool value)
     isAlive = value;
 }
 
+void Plant::watering(unsigned &water)
+{
+    if (water >= consumedWater) {
+        water-= consumedWater;
+    } else {
+        isAlive = false;
+    }
+}
+
 bool Plant::operator==(const Plant& other)
 {
     bool isEqual{true};
@@ -120,7 +129,7 @@ std::ostream &operator<<(std::ostream &out, Plant const &m)
     out << m.getName() << "\nValue: " << m.getValue()
             << ", consumed water: " << m.getConsumedWater()
             << ", frequency watering water: " << m.getFrequency()
-            << ", qrowing time: " << m.getGrowRime() << "\n";
+            << ", qrowing time: " << m.getGrowTime() << "\n";
 
     return out;
 }

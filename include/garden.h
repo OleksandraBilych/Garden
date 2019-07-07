@@ -34,7 +34,7 @@ class Garden {
         void addPlant(Plant& plant);
         void removePlant(unsigned position);
 
-        const Plant& getPlantWithPos(unsigned position) const;
+        Plant& getPlantWithPos(unsigned position);
 
         void printRipePlants();
         void printGrowingPlants();

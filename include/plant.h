@@ -35,6 +35,7 @@ class Plant {
 
         bool operator==(const Plant& other);
 
+        void watering(unsigned &water);
         // TO DO: how indicate that a plant needs water?
 
     private:
