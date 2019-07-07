@@ -8,7 +8,9 @@
 #include <string>
 #include <iostream>
 
-class Plant {
+#include "seed.h"
+
+class Plant : public Seed {
     public:
         explicit Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime);
         Plant(const Plant& other);
@@ -17,33 +19,17 @@ class Plant {
 
         ~Plant() {};
 
-        const std::string& getName() const;
-        int getValue() const;
-        int getConsumedWater() const;
-        int getFrequency() const;
-        int getGrowTime() const;
         bool getIsRipened() const;
         bool getIsAlive() const;
 
-        void setName(const std::string& name);
-        void setValue(int value);
-        void setConsumedWater(int value);
-        void setFrequency(int value);
-        void setGrowTime(int value);
         void setIsRipened(bool value);
         void setIsAlive(bool value);
 
         bool operator==(const Plant& other);
 
         void watering(unsigned &water);
-        // TO DO: how indicate that a plant needs water?
 
     private:
-        std::string name;
-        int value;
-        int consumedWater;
-        int frequency; // frequency watering
-        int growTime;
         bool isRipened;
         bool isAlive;
 };

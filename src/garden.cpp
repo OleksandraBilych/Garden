@@ -102,11 +102,13 @@ void Garden::removePlant(unsigned position)
 Plant& Garden::getPlantWithPos(unsigned position)
 {
     try {
-        return plants.at(position);
+        plants.at(position);
     }
     catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << '\n';
     }
+    
+    return plants.at(position);
 }
 
 void Garden::printRipePlants()
