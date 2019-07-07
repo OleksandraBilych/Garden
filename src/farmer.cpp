@@ -92,8 +92,9 @@ void Farmer::removeTheCheapestPlant()
     for(auto& [pos, days] : journal) {
         auto& plant = garden->getPlantWithPos(pos);
 
-        rating = plant.getGrowTime() / plant.getFrequency() * plant.getConsumedWater();
-        if (minRating > rating) {
+        // TO DO: add dependency with the journal
+        rating = plant.getValue() / plant.getGrowTime() / plant.getFrequency() * plant.getConsumedWater();
+        if (minRating < rating) {
             minRating = rating;
             minPos = pos;
         }
@@ -101,6 +102,40 @@ void Farmer::removeTheCheapestPlant()
 
     garden->removePlant(minPos);
     journal.erase(minPos);
+}
+
+void Farmer::plantSeed()
+{
+    if (!garden->hasFreeSpots())
+        return;
+
+    //determine which seed is the best
+    unsigned bestRating{0};
+    unsigned rating{0};
+    unsigned pos{0};
+
+    for (int i = seeds.size() - 1; i >= 0; --i) {
+        auto& seed = seeds[i].sort;
+        rating = seed.getValue() / seed.getGrowTime() / seed.getFrequency() * seed.getConsumedWater();
+
+        if (bestRating > rating) {
+            bestRating = rating;
+            pos = i;
+        }
+    }
+
+    //plant seed
+    unsigned short plantPos = garden->addPlant(Plant(seeds[pos].sort));
+    seeds[pos].amount--;
+
+    //add to journal
+    journal.emplace(plantPos,Days(garden->getLastPlant().getFrequency()
+                                , garden->getLastPlant().getGrowTime()));
+
+    //remove seed if its amount = 0
+    if (!seeds[pos].amount) {
+        seeds.erase(seeds.begin() + pos);
+    }
 }
 
 void Farmer::printRipePlants()

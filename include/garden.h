@@ -31,10 +31,11 @@ class Garden {
         // calculate value of all plants
         int calculateValue() const;
 
-        void addPlant(Plant& plant);
-        void removePlant(unsigned position);
+        unsigned short addPlant(Plant&& plant);
+        void removePlant(unsigned short position);
 
         Plant& getPlantWithPos(unsigned position);
+        Plant& getLastPlant();
 
         void printRipePlants();
         void printGrowingPlants();

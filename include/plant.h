@@ -13,6 +13,7 @@
 class Plant : public Seed {
     public:
         explicit Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime);
+        Plant(const Seed &seed);
         Plant(const Plant& other);
 
         Plant& operator=(const Plant& other);

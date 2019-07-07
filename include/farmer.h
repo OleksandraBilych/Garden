@@ -18,6 +18,15 @@
 struct Days {
     short daysToWatering{0};
     short daysToRipe{0};
+
+    Days(short dtw, short dtr)
+        : daysToWatering{dtw}, daysToRipe{dtr}
+    {};
+};
+
+struct Seeds {
+    Seed sort;
+    unsigned amount;
 };
 
 class Farmer {
@@ -42,8 +51,8 @@ class Farmer {
         // remove plant with the lovest ratio
         // depends on the needed amount of water to ripen  
         void removeTheCheapestPlant();
-
-        // void plantSeed(Seed&& sd);
+        //plant the best one seed
+        void plantSeed();
         // TO DO: how to receive and send seeds
 
         void printRipePlants();
@@ -58,7 +67,6 @@ class Farmer {
         // plant's position in garen vector plants and days to watering
         // journal contains only qrowin plants
         std::unordered_map<unsigned short, Days> journal;
+        std::vector<Seeds> seeds;
         unsigned water;
-
-        // std::vector<Seed> seeds;
 };

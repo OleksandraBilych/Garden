@@ -5,6 +5,10 @@ Plant::Plant(const std::string& name, int value, int consumedWater, int frequenc
     isAlive{true}, isRipened{false}
 {}
 
+Plant::Plant(const Seed &seed) 
+    : Seed(seed), isAlive{true}, isRipened{false}
+{}
+
 Plant::Plant(const Plant& other)
     : Seed(other.name, other.value, other.consumedWater, other.frequency, other.growTime)
 {

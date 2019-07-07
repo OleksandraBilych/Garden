@@ -78,18 +78,20 @@ int Garden::calculateValue() const
     return sum;
 }
 
-void Garden::addPlant(Plant& plant)
+unsigned short Garden::addPlant(Plant&& plant)
 {
     if (!freeSpots)
     {
-        return;
+        return -1;
     }
 
     plants.push_back(plant);
     freeSpots--;
+
+    return plants.size() - 1;
 }
 
-void Garden::removePlant(unsigned position)
+void Garden::removePlant(unsigned short position)
 {
     try {
         plants.at(position).setIsAlive(false);
@@ -107,8 +109,12 @@ Plant& Garden::getPlantWithPos(unsigned position)
     catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << '\n';
     }
-    
+
     return plants.at(position);
+}
+
+Plant& Garden::getLastPlant() {
+    return getPlantWithPos(plants.size() - 1);
 }
 
 void Garden::printRipePlants()
