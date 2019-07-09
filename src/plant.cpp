@@ -1,17 +1,17 @@
 #include "plant.h"
 
 Plant::Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime)
-    : Seed(name, value, consumedWater, frequency, growTime),
-    isAlive{true}, isRipened{false}
-{}
-
-Plant::Plant(const Seed &seed) 
-    : Seed(seed), isAlive{true}, isRipened{false}
+    : name{name}, value{value}, consumedWater{consumedWater}, frequency{frequency}
+    , growTime{growTime}, isAlive{true}, isRipened{false}
 {}
 
 Plant::Plant(const Plant& other)
-    : Seed(other.name, other.value, other.consumedWater, other.frequency, other.growTime)
 {
+    name = other.name;
+    value = other.value;
+    consumedWater = other.consumedWater;
+    frequency = other.frequency;
+    growTime = other.growTime;
     isRipened = other.isRipened;
     isAlive = other.isAlive;
 }
@@ -30,6 +30,31 @@ Plant& Plant::operator=(const Plant& other)
     return *this;
 }
 
+const std::string& Plant::getName() const
+{
+    return name;
+}
+
+int Plant::getValue() const
+{
+    return value;
+}
+
+int Plant::getConsumedWater() const
+{
+    return consumedWater;
+}
+
+int Plant::getFrequency() const
+{
+    return frequency;
+}
+
+int Plant::getGrowTime() const
+{
+    return growTime;
+}
+
 bool Plant::getIsRipened() const
 {
     return isRipened;
@@ -38,6 +63,31 @@ bool Plant::getIsRipened() const
 bool Plant::getIsAlive() const
 {
     return isAlive;
+}
+
+void Plant::setName(const std::string& name)
+{
+    this->name = name;
+}
+
+void Plant::setValue(int value)
+{
+    this->value = value;
+}
+
+void Plant::setConsumedWater(int value)
+{
+    consumedWater = value;
+}
+
+void Plant::setFrequency(int value)
+{
+    frequency = value;
+}
+
+void Plant::setGrowTime(int value)
+{
+    growTime = value;
 }
 
 void Plant::setIsRipened(bool value)

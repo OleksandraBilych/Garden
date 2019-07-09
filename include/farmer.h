@@ -24,9 +24,13 @@ struct Days {
     {};
 };
 
-struct Seeds {
-    Seed sort;
+struct FuturePlant {
+    Plant sort;
     unsigned amount;
+
+    FuturePlant(Plant sort, unsigned amount)
+        : sort(sort), amount(amount)
+    {};
 };
 
 class Farmer {
@@ -45,6 +49,8 @@ class Farmer {
 
         void setName(const std::string& name);
         void setWater(unsigned value);
+
+        void receiveSeed(Plant&& sort, unsigned amount);
 
         // check if plants need watering
         void checkPlants();
@@ -67,6 +73,6 @@ class Farmer {
         // plant's position in garen vector plants and days to watering
         // journal contains only qrowin plants
         std::unordered_map<unsigned short, Days> journal;
-        std::vector<Seeds> seeds;
+        std::vector<FuturePlant> futurePlants;
         unsigned water;
 };

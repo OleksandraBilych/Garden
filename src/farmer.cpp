@@ -104,6 +104,11 @@ void Farmer::removeTheCheapestPlant()
     journal.erase(minPos);
 }
 
+void Farmer::receiveSeed(Plant&& sort, unsigned amount)
+{
+    futurePlants.emplace_back(FuturePlant(std::move(sort), amount));
+}
+
 void Farmer::plantSeed()
 {
     if (!garden->hasFreeSpots())
@@ -114,9 +119,9 @@ void Farmer::plantSeed()
     unsigned rating{0};
     unsigned pos{0};
 
-    for (int i = seeds.size() - 1; i >= 0; --i) {
-        auto& seed = seeds[i].sort;
-        rating = seed.getValue() / seed.getGrowTime() / seed.getFrequency() * seed.getConsumedWater();
+    for (int i = futurePlants.size() - 1; i >= 0; --i) {
+        auto& plant = futurePlants[i].sort;
+        rating = plant.getValue() / plant.getGrowTime() / plant.getFrequency() * plant.getConsumedWater();
 
         if (bestRating > rating) {
             bestRating = rating;
@@ -125,16 +130,16 @@ void Farmer::plantSeed()
     }
 
     //plant seed
-    unsigned short plantPos = garden->addPlant(Plant(seeds[pos].sort));
-    seeds[pos].amount--;
+    unsigned short plantPos = garden->addPlant(std::move(futurePlants[pos].sort));
+    futurePlants[pos].amount--;
 
     //add to journal
     journal.emplace(plantPos,Days(garden->getLastPlant().getFrequency()
                                 , garden->getLastPlant().getGrowTime()));
 
     //remove seed if its amount = 0
-    if (!seeds[pos].amount) {
-        seeds.erase(seeds.begin() + pos);
+    if (!futurePlants[pos].amount) {
+        futurePlants.erase(futurePlants.begin() + pos);
     }
 }
 
@@ -162,6 +167,6 @@ void Farmer::printRipeandGrowingPlants()
 
 void Farmer::printAllPlants()
 {
-    std::cout << "List of qrowing plants" << std::endl;
+    std::cout << "List of all plants" << std::endl;
     garden->printAllPlants();
 }

@@ -8,21 +8,28 @@
 #include <string>
 #include <iostream>
 
-#include "seed.h"
-
-class Plant : public Seed {
+class Plant {
     public:
         explicit Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime);
-        Plant(const Seed &seed);
         Plant(const Plant& other);
 
         Plant& operator=(const Plant& other);
 
         ~Plant() {};
 
+        const std::string& getName() const;
+        int getValue() const;
+        int getConsumedWater() const;
+        int getFrequency() const;
+        int getGrowTime() const;
         bool getIsRipened() const;
         bool getIsAlive() const;
 
+        void setName(const std::string& name);
+        void setValue(int value);
+        void setConsumedWater(int value);
+        void setFrequency(int value);
+        void setGrowTime(int value);
         void setIsRipened(bool value);
         void setIsAlive(bool value);
 
@@ -30,7 +37,13 @@ class Plant : public Seed {
 
         void watering(unsigned &water);
 
+
     private:
+        std::string name;
+        int value;
+        int consumedWater;
+        int frequency; // frequency watering
+        int growTime;
         bool isRipened;
         bool isAlive;
 };
