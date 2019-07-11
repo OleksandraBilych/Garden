@@ -1,12 +1,16 @@
 #include <climits>
+#include <fstream>
 
 #include "farmer.h"
 #include "globalVariables.h"
+#include "objectConverter.hpp"
+#include "log.h"
 
 Farmer::Farmer(const std::string& name, unsigned water)
     : name(name), water(water)
 {
     garden.reset(new Garden(gardenSize));
+    init();
 }
 
 Farmer::Farmer(Farmer&& other) noexcept
@@ -15,6 +19,7 @@ Farmer::Farmer(Farmer&& other) noexcept
     water = other.water;
     journal = std::move(other.journal);
     garden = std::move(other.garden);
+    futurePlants = std::move(other.futurePlants);
 }
 
 Farmer& Farmer::operator=(Farmer&& other) noexcept
@@ -23,8 +28,22 @@ Farmer& Farmer::operator=(Farmer&& other) noexcept
     water = other.water;
     journal = std::move(other.journal);
     garden = std::move(other.garden);
+    futurePlants = std::move(other.futurePlants);
 
     return *this;
+}
+
+void Farmer::init()
+{
+    std::ifstream initPlants("../doc/initPlants.json");
+    json j;
+
+    initPlants >> j;
+
+    receiveSeed(Converter::toPlant(j), Converter::toAmount(j));
+
+    PRINT("exit init");
+    PRINT(futurePlants[0].sort.getName());
 }
 
 const std::string& Farmer::getName() const
@@ -106,13 +125,18 @@ void Farmer::removeTheCheapestPlant()
 
 void Farmer::receiveSeed(Plant&& sort, unsigned amount)
 {
-    futurePlants.emplace_back(FuturePlant(std::move(sort), amount));
+    PRINT("Receiving plant");
+
+    futurePlants.push_back(FuturePlant(std::move(sort), amount));
 }
 
 void Farmer::plantSeed()
 {
-    if (!garden->hasFreeSpots())
+    PRINT("Plant seed");
+
+    if (!garden->hasFreeSpots()) {
         return;
+    }
 
     //determine which seed is the best
     unsigned bestRating{0};

@@ -16,6 +16,19 @@ Plant::Plant(const Plant& other)
     isAlive = other.isAlive;
 }
 
+Plant::Plant(Plant&& other) noexcept
+{
+    name = other.name;
+    value = other.value;
+    consumedWater = other.consumedWater;
+    frequency = other.frequency;
+    growTime = other.growTime;
+    isRipened = other.isRipened;
+    isAlive = other.isAlive;
+
+    other.clear();
+}
+
 
 Plant& Plant::operator=(const Plant& other)
 {
@@ -28,6 +41,32 @@ Plant& Plant::operator=(const Plant& other)
     isAlive = other.isAlive;
 
     return *this;
+}
+
+Plant& Plant::operator=(Plant&& other) noexcept
+{
+    name = other.name;
+    value = other.value;
+    consumedWater = other.consumedWater;
+    frequency = other.frequency;
+    growTime = other.growTime;
+    isRipened = other.isRipened;
+    isAlive = other.isAlive;
+
+    other.clear();
+
+    return *this;
+}
+
+void Plant::clear()
+{
+    name = "";
+    value = 0;
+    consumedWater = 0;
+    frequency = 0;
+    growTime = 0;
+    isRipened = 0;
+    isAlive = 0;
 }
 
 const std::string& Plant::getName() const

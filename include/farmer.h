@@ -44,12 +44,16 @@ class Farmer {
 
         ~Farmer() {};
 
+        // read data form json, create garden & plants
+        void init(); 
+
         const std::string& getName() const;
         unsigned getWater() const;
 
         void setName(const std::string& name);
         void setWater(unsigned value);
 
+        void receiveSeed(unsigned amount) {};
         void receiveSeed(Plant&& sort, unsigned amount);
 
         // check if plants need watering

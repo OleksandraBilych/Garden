@@ -12,10 +12,13 @@ class Plant {
     public:
         explicit Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime);
         Plant(const Plant& other);
+        Plant(Plant&& other) noexcept;
 
         Plant& operator=(const Plant& other);
+        Plant& operator=(Plant&& other) noexcept;
 
         ~Plant() {};
+        void clear();
 
         const std::string& getName() const;
         int getValue() const;
