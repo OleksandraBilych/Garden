@@ -1,6 +1,6 @@
 #include "plant.h"
 
-Plant::Plant(const std::string& name, int value, int consumedWater, int frequency, int growTime)
+Plant::Plant(const std::string& name, int value, unsigned consumedWater, int frequency, int growTime)
     : name{name}, value{value}, consumedWater{consumedWater}, frequency{frequency}
     , growTime{growTime}, isAlive{true}, isRipened{false}
 {}
@@ -79,7 +79,7 @@ int Plant::getValue() const
     return value;
 }
 
-int Plant::getConsumedWater() const
+unsigned Plant::getConsumedWater() const
 {
     return consumedWater;
 }
@@ -114,7 +114,7 @@ void Plant::setValue(int value)
     this->value = value;
 }
 
-void Plant::setConsumedWater(int value)
+void Plant::setConsumedWater(unsigned value)
 {
     consumedWater = value;
 }
@@ -139,7 +139,7 @@ void Plant::setIsAlive(bool value)
     isAlive = value;
 }
 
-void Plant::watering(unsigned &water)
+void Plant::watering(unsigned& water)
 {
     if (water >= consumedWater) {
         water-= consumedWater;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdlib>
+
 #include "json.hpp"
 #include "plant.h"
 #include "log.h"
@@ -23,53 +25,65 @@ class MissedParameterException {
 
 class Converter {
     private:
-        static int parceInt(const json& json, const std::string& fieldName, bool required);
-        static std::string parceStr(const json& json, const std::string& fieldName, bool required);
+        static int parceInt(const json& json, const std::string& fieldName, bool required)
+        {
+            try {
+                return json.at(fieldName);
+            } catch (std::out_of_range& e) {
+                if (required) {
+                    throw MissedParameterException(fieldName);
+                }
+            }
+
+            return 0;
+        };
+
+        static std::string parceStr(const json& json, const std::string& fieldName, bool required)
+        {
+            try {
+                return json.at(fieldName);
+            } catch (std::out_of_range& e) {
+                if (required) {
+                    throw MissedParameterException(fieldName);
+                }
+            }
+
+            return 0;
+        };
 
         Converter() {};
+
     public:
-        static Plant&& toPlant(const json& j);
-        static int toAmount(const json& j);
+        static Plant&& toPlant(const json& j)
+        {
+            std::string name{parceStr(j, nameField, true)};
+            int value{parceInt(j, valueField, true)};
+            int water{parceInt(j, waterField, true)};
+            int frequency{parceInt(j, frequencyField, true)};
+            int growTime{parceInt(j, growTimeField, true)};
+
+            Plant p(name, value, water, frequency, growTime);
+
+            return std::move(p);
+        };
+
+        static int toAmount(const json& j)
+        {
+            return parceInt(j, amountField, true);
+        };
+
+        static json toJson(const Plant& plant)
+        {
+            json j;
+
+            j[nameField] = plant.getName();
+            j[valueField] = plant.getValue();
+            j[waterField] = plant.getConsumedWater();
+            j[frequencyField] = plant.getFrequency();
+            j[growTimeField] = plant.getGrowTime();
+
+            j[amountField] = rand() % 10;
+
+            return j;
+        }
 };
-
-int Converter::parceInt(const json& json, const std::string& fieldName, bool required) {
-    try {
-        return json.at(fieldName);
-    } catch (std::out_of_range& e) {
-        if (required) {
-            throw MissedParameterException(fieldName);
-        }
-    }
-
-    return 0;
-}
-
-std::string Converter::parceStr(const json& json, const std::string& fieldName, bool required) {
-    try {
-        return json.at(fieldName);
-    } catch (std::out_of_range& e) {
-        if (required) {
-            throw MissedParameterException(fieldName);
-        }
-    }
-
-    return 0;
-}
-
-Plant&& Converter::toPlant(const json& j)
-{
-    std::string name{parceStr(j, nameField, true)};
-    int value{parceInt(j, valueField, true)};
-    int water{parceInt(j, waterField, true)};
-    int frequency{parceInt(j, frequencyField, true)};
-    int growTime{parceInt(j, growTimeField, true)};
-
-    Plant p(name, value, water, frequency, growTime);
-
-    return std::move(p);
-}
-
-int Converter::toAmount(const json& j)
-{
-    return parceInt(j, amountField, true);
-}
