@@ -53,6 +53,7 @@ class Farmer {
         void setName(const std::string& name);
         void setWater(unsigned value);
 
+        void sendSeed();
         void receiveSeed(unsigned amount) {};
         void receiveSeed(Plant&& sort, unsigned amount);
 
@@ -63,7 +64,6 @@ class Farmer {
         void removeTheCheapestPlant();
         //plant the best one seed
         void plantSeed();
-        // TO DO: how to receive and send seeds
 
         void printRipePlants();
         void printGrowingPlants();

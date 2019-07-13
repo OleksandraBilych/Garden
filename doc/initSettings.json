@@ -1,0 +1,24 @@
+{
+    "client" : {
+        "ip": "localhost",
+        "port": 12345
+    },
+    "plants": [
+        {
+                "name":"Orchid",
+                "amount": 1,
+                "value": 10,
+                "water": 5,
+                "frequency": 5,
+                "grow_time": 6
+        },
+        {
+                "name":"Blackberry",
+                "amount": 1,
+                "value": 5,
+                "water": 1,
+                "frequency": 5,
+                "grow_time": 5
+        }
+    ]
+}

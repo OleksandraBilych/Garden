@@ -35,15 +35,24 @@ Farmer& Farmer::operator=(Farmer&& other) noexcept
 
 void Farmer::init()
 {
-    std::ifstream initPlants("../doc/initPlants.json");
+    std::ifstream initPlants;
     json j;
 
+    try {
+        initPlants.open(initSettingsFile, std::ifstream::in);
+    } catch (std::ios_base::failure& e) {
+        PRINT(e.what());
+    }
+
     initPlants >> j;
+    json plants = j.at("plants");
 
-    receiveSeed(Converter::toPlant(j), Converter::toAmount(j));
-
+    for (auto& plant : plants) {
+        receiveSeed(Converter::toPlant(plant), Converter::toAmount(plant));
+    }
+    
+    initPlants.close();
     PRINT("exit init");
-    PRINT(futurePlants[0].sort.getName());
 }
 
 const std::string& Farmer::getName() const
@@ -121,6 +130,14 @@ void Farmer::removeTheCheapestPlant()
 
     garden->removePlant(minPos);
     journal.erase(minPos);
+}
+
+void Farmer::sendSeed()
+{
+    Plant p("Christmas Tree", 100, 5, 3, 1);
+    int amount{1};
+    
+    Converter::toJson(p);
 }
 
 void Farmer::receiveSeed(Plant&& sort, unsigned amount)

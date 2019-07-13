@@ -1,26 +1,28 @@
 #include <iostream>
+#include <memory>
 
 #include "plant.h"
 #include "garden.h"
 #include "farmer.h"
-#include <unordered_map>
+#include "objectConverter.hpp"
+#include "appServer.h"
 
 int main(int argc, char const *argv[])
 {
+    auto port {std::atoi(argv[1])};
+    std::cout << port << std::endl;
+    
+    std::unique_ptr<AppServer> app(new AppServer(port));
+    app->start();
+
     std::cout << "Game start..." << std::endl;
     Plant rose("Rose", 10, 10, 5, 3);
 
     Farmer f("Iosif", 50);
-    //f.receiveSeed(std::move(rose), 3);
-
+    f.plantSeed();
     f.plantSeed();
     f.printGrowingPlants();
-
-    //std::cout << rose.getName() << std::endl;
-
-    f.removeTheCheapestPlant();
-    f.printGrowingPlants();
-    f.printAllPlants();
+    //f.sendSeed();
 
     return 0;
 }
