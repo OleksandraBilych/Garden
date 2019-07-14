@@ -75,7 +75,6 @@ void AppServer::start()
 
     PRINT("Creatind sending thread");
     sendingThread = std::thread(&AppServer::sendingControl, this);
-    sendingThread.join();
 }
 
 void AppServer::stop()
@@ -116,6 +115,20 @@ void AppServer::addClient()
 
 void AppServer::sendingControl()
 {
+    bool isConnected {false};
+
+    while (!isConnected) {
+        try {
+            client->connectToServer();
+            isConnected = true;
+        } catch (ConnectClientException& e) {
+            PRINT("Reconnect");
+        }
+
+        // try reconnect in 1 sec
+        std::this_thread::sleep_for (std::chrono::seconds(1));
+    }
+
     for (int msgNumber = 1; isRunning && msgNumber <= 3; ++msgNumber) {
         client->sendSeeds(farmer->getSeed());
 

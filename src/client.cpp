@@ -29,10 +29,14 @@ void Client::init()
     client.sin_family = AF_INET;
     inet_pton(AF_INET, address.c_str(), &(client.sin_addr));
     client.sin_port = htons(port);
+}
 
+void Client::connectToServer()
+{
     if (connect(sockfd, (struct sockaddr*) &client, sizeof(client)) < 0) {
-        perror("connect"); 
-        exit(EXIT_FAILURE); 
+        PRINT("Failed connect to server");
+        
+        throw ConnectClientException();
     }
 }
 

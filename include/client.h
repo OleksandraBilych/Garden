@@ -15,6 +15,7 @@ public:
     ~Client();
 
     void init();
+    void connectToServer();
     void sendSeeds(const std::string& message);
 
     const std::string& getAddress() const;
@@ -27,3 +28,5 @@ private:
     sockaddr_in client;
     std::mutex mutex;
 };
+
+class ConnectClientException {};
