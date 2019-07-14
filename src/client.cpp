@@ -36,7 +36,7 @@ void Client::init()
     }
 }
 
-void Client::sendMessage(const std::string& message)
+void Client::sendSeeds(const std::string& message)
 {
     std::lock_guard<std::mutex> lock(mutex);
 

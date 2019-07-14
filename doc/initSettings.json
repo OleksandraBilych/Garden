@@ -6,19 +6,27 @@
     "plants": [
         {
                 "name":"Orchid",
-                "amount": 1,
+                "amount": 10,
                 "value": 10,
                 "water": 5,
-                "frequency": 5,
-                "grow_time": 6
+                "frequency": 10,
+                "grow_time": 30
         },
         {
                 "name":"Blackberry",
-                "amount": 1,
+                "amount": 15,
                 "value": 5,
                 "water": 1,
                 "frequency": 5,
-                "grow_time": 5
+                "grow_time": 20
+        },
+        {
+                "name":"Christmas Tree",
+                "amount": 10,
+                "value": 30,
+                "water": 10,
+                "frequency": 10,
+                "grow_time": 15
         }
     ]
 }

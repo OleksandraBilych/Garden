@@ -9,7 +9,7 @@
 Farmer::Farmer(const std::string& name, unsigned water)
     : name(name), water(water)
 {
-    garden.reset(new Garden(gardenSize));
+    garden.reset(new Garden(globVar::gardenSize));
     init();
 }
 
@@ -19,7 +19,8 @@ Farmer::Farmer(Farmer&& other) noexcept
     water = other.water;
     journal = std::move(other.journal);
     garden = std::move(other.garden);
-    futurePlants = std::move(other.futurePlants);
+    receivedSeeds = std::move(other.receivedSeeds);
+    seedsToSend = std::move(other.seedsToSend);
 }
 
 Farmer& Farmer::operator=(Farmer&& other) noexcept
@@ -28,18 +29,20 @@ Farmer& Farmer::operator=(Farmer&& other) noexcept
     water = other.water;
     journal = std::move(other.journal);
     garden = std::move(other.garden);
-    futurePlants = std::move(other.futurePlants);
+    receivedSeeds = std::move(other.receivedSeeds);
+    seedsToSend = std::move(other.seedsToSend);
 
     return *this;
 }
 
 void Farmer::init()
 {
+    PRINT("init farmer");
     std::ifstream initPlants;
     json j;
 
     try {
-        initPlants.open(initSettingsFile, std::ifstream::in);
+        initPlants.open(globVar::initSettingsFile, std::ifstream::in);
     } catch (std::ios_base::failure& e) {
         PRINT(e.what());
     }
@@ -48,7 +51,8 @@ void Farmer::init()
     json plants = j.at("plants");
 
     for (auto& plant : plants) {
-        receiveSeed(Converter::toPlant(plant), Converter::toAmount(plant));
+        addSeedToSend(Converter::toPlant(plant)
+                            , Converter::toAmount(plant));
     }
     
     initPlants.close();
@@ -132,19 +136,29 @@ void Farmer::removeTheCheapestPlant()
     journal.erase(minPos);
 }
 
-void Farmer::sendSeed()
+std::string Farmer::getSeed()
 {
-    Plant p("Christmas Tree", 100, 5, 3, 1);
-    int amount{1};
-    
-    Converter::toJson(p);
+    std::string seed;
+    if (seedsToSend.empty()) {
+        PRINT("seedsToSend is empty");
+        return seed;
+    }
+
+    seed = Converter::toJson(seedsToSend.back()).dump();
+    PRINT("Sending:\n" + seed);
+    seedsToSend.pop_back();
+
+    return seed;
 }
 
-void Farmer::receiveSeed(Plant&& sort, unsigned amount)
+void Farmer::addReceivedSeed(Plant&& sort, unsigned amount)
 {
-    PRINT("Receiving plant");
+    receivedSeeds.push_back(FuturePlant(std::move(sort), amount));
+}
 
-    futurePlants.push_back(FuturePlant(std::move(sort), amount));
+void Farmer::addSeedToSend(Plant&& sort, unsigned amount)
+{
+    seedsToSend.push_back(FuturePlant(std::move(sort), amount));
 }
 
 void Farmer::plantSeed()
@@ -160,8 +174,8 @@ void Farmer::plantSeed()
     unsigned rating{0};
     unsigned pos{0};
 
-    for (int i = futurePlants.size() - 1; i >= 0; --i) {
-        auto& plant = futurePlants[i].sort;
+    for (int i = receivedSeeds.size() - 1; i >= 0; --i) {
+        auto& plant = receivedSeeds[i].sort;
         rating = plant.getValue() / plant.getGrowTime() / plant.getFrequency() * plant.getConsumedWater();
 
         if (bestRating > rating) {
@@ -171,16 +185,16 @@ void Farmer::plantSeed()
     }
 
     //plant seed
-    unsigned short plantPos = garden->addPlant(std::move(futurePlants[pos].sort));
-    futurePlants[pos].amount--;
+    unsigned short plantPos = garden->addPlant(std::move(receivedSeeds[pos].sort));
+    receivedSeeds[pos].amount--;
 
     //add to journal
     journal.emplace(plantPos,Days(garden->getLastPlant().getFrequency()
                                 , garden->getLastPlant().getGrowTime()));
 
     //remove seed if its amount = 0
-    if (!futurePlants[pos].amount) {
-        futurePlants.erase(futurePlants.begin() + pos);
+    if (!receivedSeeds[pos].amount) {
+        receivedSeeds.erase(receivedSeeds.begin() + pos);
     }
 }
 

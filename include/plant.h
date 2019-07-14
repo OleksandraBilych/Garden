@@ -52,3 +52,12 @@ class Plant {
 };
 
 std::ostream &operator<<(std::ostream &out, Plant const &m);
+
+struct FuturePlant {
+    Plant sort;
+    unsigned amount;
+
+    FuturePlant(Plant sort, unsigned amount)
+        : sort(sort), amount(amount)
+    {};
+};

@@ -14,6 +14,7 @@
 #include <memory>
 
 #include "garden.h"
+#include "objectConverter.hpp"
 
 struct Days {
     short daysToWatering{0};
@@ -21,15 +22,6 @@ struct Days {
 
     Days(short dtw, short dtr)
         : daysToWatering{dtw}, daysToRipe{dtr}
-    {};
-};
-
-struct FuturePlant {
-    Plant sort;
-    unsigned amount;
-
-    FuturePlant(Plant sort, unsigned amount)
-        : sort(sort), amount(amount)
     {};
 };
 
@@ -53,9 +45,9 @@ class Farmer {
         void setName(const std::string& name);
         void setWater(unsigned value);
 
-        void sendSeed();
-        void receiveSeed(unsigned amount) {};
-        void receiveSeed(Plant&& sort, unsigned amount);
+        std::string getSeed();
+        void addReceivedSeed(Plant&& sort, unsigned amount);
+        void addSeedToSend(Plant&& sort, unsigned amount);
 
         // check if plants need watering
         void checkPlants();
@@ -77,6 +69,7 @@ class Farmer {
         // plant's position in garen vector plants and days to watering
         // journal contains only qrowin plants
         std::unordered_map<unsigned short, Days> journal;
-        std::vector<FuturePlant> futurePlants;
+        std::vector<FuturePlant> receivedSeeds;
+        std::vector<FuturePlant> seedsToSend;
         unsigned water;
 };

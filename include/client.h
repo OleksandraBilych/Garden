@@ -15,7 +15,7 @@ public:
     ~Client();
 
     void init();
-    void sendMessage(const std::string& message);
+    void sendSeeds(const std::string& message);
 
     const std::string& getAddress() const;
     int getPort() const;

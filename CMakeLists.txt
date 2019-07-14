@@ -28,4 +28,7 @@ file(GLOB BINARY_HEADERS
 
 set(BINARY_SOURCE_FILES ${BINARY_SOURCES} ${BINARY_HEADERS})
 
+find_package( Threads )
 add_executable(${BINARY_NAME} ${BINARY_SOURCE_FILES})
+
+target_link_libraries( ${BINARY_NAME} ${CMAKE_THREAD_LIBS_INIT} )

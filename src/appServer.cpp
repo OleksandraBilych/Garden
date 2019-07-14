@@ -7,9 +7,12 @@
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <chrono>
 
-AppServer::AppServer(int port) : port {port}, isRunning {false}
+AppServer::AppServer(int port, unsigned sendingFrequency)
+    : port {port}, sendingFrequency {sendingFrequency}, isRunning {false}
 {
+    farmer.reset(new Farmer(globVar::farmerName, globVar::farmersWater));
     init();
     addClient();
 }
@@ -19,6 +22,10 @@ AppServer::~AppServer()
     stop();
 
     close(sockfd);
+
+    if (sendingThread.joinable()) {
+        sendingThread.join();
+    }
 }
 
 void AppServer::init()
@@ -60,21 +67,24 @@ void AppServer::start()
     if (isRunning) {
         return;
     }
-
-    isRunning = true;
-
-    for (;isRunning;) {
-        //client->sendMessage(message);
+    
+    {
+        std::lock_guard<std::mutex> lck (serverStatus);
+        isRunning = true;
     }
+
+    PRINT("Creatind sending thread");
+    sendingThread = std::thread(&AppServer::sendingControl, this);
+    sendingThread.join();
 }
 
 void AppServer::stop()
 {
-    if (!isRunning) {
-        return;
-    }
+    if (isRunning) {
+        std::lock_guard<std::mutex> lck (serverStatus);
 
-    isRunning = false;
+        isRunning = false;
+    }
 }
 
 void AppServer::restart()
@@ -91,7 +101,7 @@ void AppServer::addClient()
     json cl;
 
     try {
-        init.open(initSettingsFile, std::ifstream::in);
+        init.open(globVar::initSettingsFile, std::ifstream::in);
     } catch (std::ios_base::failure& e) {
         PRINT(e.what());
     }
@@ -102,4 +112,13 @@ void AppServer::addClient()
     client.reset(new Client(ip, port));
 
     PRINT("Client added");
+}
+
+void AppServer::sendingControl()
+{
+    for (int msgNumber = 1; isRunning && msgNumber <= 3; ++msgNumber) {
+        client->sendSeeds(farmer->getSeed());
+
+        std::this_thread::sleep_for (std::chrono::seconds(sendingFrequency));
+    }
 }

@@ -82,17 +82,17 @@ class Converter {
             return std::move(cl);
         };
 
-        static json toJson(const Plant& plant)
+        static json toJson(const FuturePlant& plant)
         {
             json j;
 
-            j[nameField] = plant.getName();
-            j[valueField] = plant.getValue();
-            j[waterField] = plant.getConsumedWater();
-            j[frequencyField] = plant.getFrequency();
-            j[growTimeField] = plant.getGrowTime();
+            j[nameField] = plant.sort.getName();
+            j[valueField] = plant.sort.getValue();
+            j[waterField] = plant.sort.getConsumedWater();
+            j[frequencyField] = plant.sort.getFrequency();
+            j[growTimeField] = plant.sort.getGrowTime();
 
-            j[amountField] = rand() % 10;
+            j[amountField] = plant.amount;
 
             return j;
         }
